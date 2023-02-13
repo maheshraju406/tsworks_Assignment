@@ -1,0 +1,26 @@
+import yfinance as yahooFinance
+import pandas as pd
+import json
+import MySQLdb
+f = open('C:/Users/Mahesh N/OneDrive/Desktop/tickers.json')
+data = json.load(f)
+for tick in data['ticker']:
+    print(type(tick))
+filename = 'AMZNfinancial_data_6m.csv'
+FinanceData = pd.read_csv("C:/Users/Mahesh/OneDrive/Desktop/Finance/{}".format(filename), index_col=False)
+db = MySQLdb.connect(host="127.0.0.1",    # your host, usually localhost
+                     user="root",         # your username
+                     passwd="jyothish@123",  # your password
+                     db="hello")        # name of the data base
+
+print("Connection Successful")
+# you must create a Cursor object. It will let
+#  you execute all the queries you need
+cur = db.cursor()
+
+for i, row in FinanceData.iterrows():
+    sql = "INSERT INTO hello.Finance VALUES (%s,%s,%s,%s,%s,%s)"
+    cur.execute(sql, tuple(row))
+print("Records Inserted")
+db.commit()
+db.close()
