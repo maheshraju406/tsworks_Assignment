@@ -1,0 +1,6 @@
+# Sample query for updation
+INSERT INTO Finance (date)
+SELECT * FROM (SELECT '2020-08-09 00:00:00-04:00') AS tmp
+WHERE NOT EXISTS (
+    SELECT date FROM finance WHERE date = '2020-08-09 00:00:00-04:00'
+) LIMIT 1;
