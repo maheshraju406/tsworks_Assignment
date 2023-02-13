@@ -1,0 +1,33 @@
+import yfinance as yahooFinance
+import json
+import pandas as pd
+import openpyxl
+import MySQLdb
+import os
+from urllib.parse import quote_plus
+from sqlalchemy import create_engine, types
+
+class Data_Load:
+
+    def Load_Files(self):
+        f = open('C:/Users/Mahesh/OneDrive/Desktop/tickers.json')
+        data = json.load(f)
+        for tick in data['ticker']:
+            GetInformation = yahooFinance.Ticker(tick)
+            info = GetInformation.history(period="6mo")
+            info.to_csv('C:/Users/Mahesh/OneDrive/Desktop/Finance/{}financial_data_6m.csv'.format(tick))
+        print("Successfully Loaded files to Location")
+
+    def Insert_Data(self):
+        for filename in os.listdir("C:/Users/Mahesh/OneDrive/Desktop/Finance"):
+            engine = create_engine(
+                "mysql://root:%s@127.0.0.1/hello" % quote_plus('raju@406'))  # enter your password and database names here
+            df = pd.read_csv("C:/Users/Mahesh/OneDrive/Desktop/Finance/{}".format(filename), sep=',', quotechar='\'',
+                             encoding='utf8')  # Replace Excel_file_name with your excel sheet name
+            df.to_sql('finance', con=engine, index=False, if_exists='append')
+        print("Successfully Inserted Data to Finance Table")
+
+
+Finance = Data_Load()
+Finance.Load_Files()
+Finance.Insert_Data()
