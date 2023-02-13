@@ -1,1 +1,1 @@
-# tsworks_Assignment
+# I am using MySQL Workbench and pycharm for execution. If the connection has to be established in MySQL Workbench, then I have to use the connectionname, hostname, username and password of MySQL Workbench in python program.
